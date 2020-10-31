@@ -140,7 +140,10 @@ app.post('/signup', (req, res, next) => {
     } else {
       Promise.resolve(models.Users.create(req.body)).then(() => {
         res.redirect('/');
-        next();
+        Promise.resolve(models.Users.getAll()).then((data) => {
+          //console.log(data);
+          next();
+        });
       });
     }
   }).catch((err) => {

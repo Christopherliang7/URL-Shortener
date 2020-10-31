@@ -7,9 +7,11 @@ module.exports.createSession = (req, res, next) => {
     Promise.resolve(models.Sessions.create())
       .then(links => {
         Promise.resolve(models.Sessions.getAll()).then((data) => {
-          res.cookies = {shortlyid: {value: ''}};
           req.session = {hash: data[data.length - 1].hash,
-            user: {username: ''}};
+            user: {username: req.body.username || ''}};
+          res.cookies = {shortlyid: {value: req.cookies.shortlyid || ''}};
+          //console.log(req.body.username, req.session.hash);
+          res.cookie('hash', req.session.hash || '');
           next();
         });
       });
@@ -17,9 +19,9 @@ module.exports.createSession = (req, res, next) => {
   if (req.cookies.shortlyid) {
     Promise.resolve(models.Sessions.get({hash: req.cookies.shortlyid})).then((data) => {
       if (data) {
-        res.cookies = {shortlyid: {value: ''}};
         req.session = {hash: data.hash,
-          user: {username: data.user.username}, userId: data.id};
+          user: {username: req.body.username || data.user.username}, userId: data.id};
+        res.cookie('hash', req.session.hash);
         next();
       } else {
         throw new Error('Invalid session');
@@ -32,7 +34,11 @@ module.exports.createSession = (req, res, next) => {
   }
 };
 
-
+// .then(() => {
+//   Promise.resolve(models.Users.getAll()).then((users) => {
+//     console.log(users);
+//   });
+// });
 
 
 
