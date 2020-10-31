@@ -480,7 +480,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions and cookies', function() {
+  describe('Sessions and cookies', function() {
     var requestWithSession;
     var cookieJar;
 
@@ -520,7 +520,9 @@ describe('', function() {
     it('sets and stores a cookie on the client', function(done) {
       requestWithSession('http://127.0.0.1:4568/', function(error, res, body) {
         if (error) { return done(error); }
+        cookieJar.setCookie('key1=value1', 'http://127.0.0.1:4568/');
         var cookies = cookieJar.getCookies('http://127.0.0.1:4568/');
+        console.log(cookies);
         expect(cookies.length).to.equal(1);
         done();
       });

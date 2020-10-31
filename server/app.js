@@ -85,13 +85,6 @@ app.post('/links',
 // login
 app.get('/login', (req, res) => {
   res.render('login');
-  models.Session.create()
-    .then(links => {
-      res.status(200).send(links);
-    })
-    .error(error => {
-      res.status(500).send(error);
-    });
 });
 
 // Post/ login => verifying identity, compare passwords, using the salt and hashing function
